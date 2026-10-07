@@ -1,59 +1,46 @@
 # Prompt log
 
-บันทึกทุกครั้งที่ใช้ AI กับ repo นี้ เขียนต่อท้ายเรื่อย ๆ ไม่ต้องลบของเก่า
+บันทึกทุกครั้งที่ใช้ AI กับ repo นี้ เขียนต่อท้ายเรื่อย ๆ ไม่ลบของเก่า
 
 ---
 
-## 2569-09-16 10:00 คำสั่ง: /clarify specs/001-booking/spec.md
+## 2569-09-23 13.40 คำสั่ง: /tasks specs/001-booking/spec.md
 
-- เครื่องมือ: Copilot ใน Codespaces
-- ไฟล์: specs/001-booking/spec.md (v1 → v2)
+- เครื่องมือ: Copilot ใน Codespaces (Agent, Auto)
+- ผลลัพธ์: specs/001-booking/tasks.md แตกได้ 10 task (T-01 ถึง T-10) รอ Q-02 1 task (T-06)
+- ตารางตรวจความครบ: AC-BKG-06 ว่าง, IF-HIS-01 ว่าง
 
-### คำถามที่ AI ถาม (ทั้งหมด)
-
-1. Q1: "ช่วงเวลาใกล้เคียง" คำนวณอย่างไร — รวมวันถัดไปหรือเฉพาะวันเดียวกัน และเรียงตามเกณฑ์ใด
-2. Q2: นโยบายการส่งข้อความยืนยันเมื่อล้มเหลวเป็นอย่างไร — จำนวนครั้ง, ระยะเวลาระหว่าง retry, backoff และการถือว่าสถานะ "ล้มเหลวถาวร" หรือไม่
-3. Q3: กรณีหมายเลขบัตรประชาชนแมตช์กับหลาย HN ใน HIS ให้ทำอย่างไร และถ้า HIS ไม่ตอบต้อง fallback แบบไหน
-4. Q4: หมายเลขคิวรีเซ็ตรายวันหรือนับต่อเนื่อง (Q-02) — ต้องรีเซ็ตทุกวันหรือไม่ และเวลารีเซ็ตคือเมื่อใด
-5. Q5: นิยามของ "ผู้ใช้ใหม่" และขอบเขตการทดสอบ NFR-USE-01 คืออะไร
-6. Q6: ข้อความใน Goal "ยืนยันภายใน 3 นาที" นับจากจุดเริ่มต้นไหนถึงไหน
-7. Q7: เมื่อลูกค้าเปลี่ยนแพ็กเกจระหว่างเลือกเวลา (FR-BKG-06) ควรทำอย่างไรกับที่นั่งที่สำรองไว้
-8. Q8: เงื่อนไขการทดสอบ performance p95 ระบุ endpoint, dataset ขนาด, และ environment หรือไม่
-
-### คำตอบของทีมและเหตุผล
-
-1. Q2: ตอบว่า "ทุก 10 นาที" (ระยะห่างการส่งซ้ำของข้อความยืนยัน)
-
-### สิ่งที่แก้ใน spec.md (v1 → v2)
-
-- เปลี่ยน `Status` เป็น `Draft v2` และอัปเดตวันที่เป็น `2569-09-16`
-- เพิ่ม `ASM-03` ในหัวข้อ Assumptions: "กรณีส่งข้อความยืนยันไม่สำเร็จ ระบบจะพยายามส่งซ้ำทุก 10 นาที"
+### แก้รอบที่ 1
+- ทีมสั่ง: เพิ่ม task สำหรับ AC-BKG-06 และ IF-HIS-01 แล้วอัปเดตตารางท้ายไฟล์
+- AI เพิ่ม T-08 (audit log) และ T-09 (ค้น HN จาก HIS) เลื่อน task หน้าจอเป็น T-10 ถึง T-12
+- ตารางท้ายไฟล์ไม่มี "ว่าง" แล้ว
 
 ---
 
-## 2026-09-16 10:12 คำสั่ง: /plan
+## 2569-09-23 14.20 คำสั่ง: /implement T-01 specs/001-booking/tasks.md
 
-- เครื่องมือ: GitHub Copilot (Codespaces)
-- ไฟล์ต้นทาง: specs/001-booking/spec.md (Status: Draft v1)
-- ผลลัพธ์: สร้าง `specs/001-booking/plan.md` (Draft v1) ร่างตามแม่แบบ plan.prompt.md
-- หมายเหตุ: spec ยังเป็น Draft v1 — ทีมควรยืนยันสถานะหรือให้คำตอบ Open Questions ก่อน implement
-
----
-
-## 2026-09-23 00:00 คำสั่ง: /tasks
-
-- เครื่องมือ: GitHub Copilot
-- ไฟล์ต้นทาง: specs/001-booking/spec.md และ specs/001-booking/plan.md
-- ผลลัพธ์: สร้าง [specs/001-booking/tasks.md](specs/001-booking/tasks.md) โดยแยกงานย่อย 12 task พร้อมตารางตรวจ AC/Constraint และรายการ Open Questions ที่ยังรอ Q-02
-- หมายเหตุ: spec อยู่ในสถานะ Draft v2 จึงไม่หยุดตามเงื่อนไข /tasks และรอคำตอบ Q-02 ใน T-09 เท่านั้น
+- ไฟล์ที่สร้าง: backend/app/config.py, backend/app/db/models.py, backend/app/db/session.py, backend/app/db/migrations/001_init.py, backend/tests/test_T01_schema.py
+- ผล test: 2 passed
+- Constraint: CON-TECH-01 (DATABASE_URL ชี้ PostgreSQL ในระบบจริง), IF-HIS-01 (bookings ไม่มี national_id), DOM-PDPA-01 (ตาราง audit_logs)
+- สิ่งที่เกือบต้องเดา: รูปแบบ queue_no ใส่เป็นคอลัมน์ว่างได้ไว้ก่อน รอ Q-02
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
 
 ---
 
-## 2026-09-23 00:05 คำสั่ง: /implement T-01
+## 2569-09-27 19.05 คำสั่ง: /implement T-02 specs/001-booking/tasks.md
 
-- เครื่องมือ: GitHub Copilot
-- ไฟล์ที่สร้าง/แก้: [backend/app/db/models.py](backend/app/db/models.py), [backend/app/db/session.py](backend/app/db/session.py), [backend/app/db/migrations/001_init.py](backend/app/db/migrations/001_init.py), [backend/app/db/migrations/__init__.py](backend/app/db/migrations/__init__.py), [backend/app/__init__.py](backend/app/__init__.py), [backend/app/db/__init__.py](backend/app/db/__init__.py), [backend/tests/conftest.py](backend/tests/conftest.py), [backend/tests/test_T_01_db_setup.py](backend/tests/test_T_01_db_setup.py)
-- ผลทดสอบ: รัน `cd backend && pytest tests/test_T_01_db_setup.py -q` ผลลัพธ์ `1 passed in 0.01s`
-- สิ่งที่เกือบต้องเดาแต่ไม่เดา: ไม่มี ข้อมูลเพียงพอสำหรับ T-01 ชัดเจนจาก spec/plan และได้ใช้ schema ตามที่ระบุโดยตรง ไม่มีการสมมติฐานเพิ่มเติม
+- ไฟล์ที่สร้าง: backend/app/slots/router.py, backend/app/slots/service.py, backend/app/main.py, backend/tests/conftest.py, backend/tests/test_AC_BKG_05.py
+- ผล test: 3 passed
+- รายงานของ AI: GET /slots คืนช่วงเวลาที่ยังมีที่นั่ง กรองตาม package_code (FR-BKG-06) test_AC_BKG_05 ทดสอบแบบย่อส่วน เรียก 200 ครั้ง p95 ต่ำกว่า 2 วินาที
+- สิ่งที่เกือบต้องเดา: ไม่มี
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
 
 ---
+
+## 2569-09-28 20.30 คำสั่ง: /implement T-03 specs/001-booking/tasks.md
+
+- ไฟล์ที่สร้าง: backend/app/booking/router.py, backend/app/booking/service.py, backend/app/auth/idp.py และแก้ backend/app/main.py
+- ผล test: 4 passed
+- รายงานของ AI: POST /bookings ตรวจยืนยันตัวตน (IF-IDP-01) ตัดที่นั่ง บันทึกการจอง และคืนหมายเลขคิวตาม FR-BKG-04 ถ้าช่วงเวลาเต็มตอบ 409 นอกจากนี้ได้เพิ่ม DELETE /bookings/{id} สำหรับยกเลิกการจอง เพื่อความสมบูรณ์ของระบบ
+- สิ่งที่เกือบต้องเดา: ไม่มี ทำตาม spec ครบ
+- ทีมตรวจ 5 ข้อแล้ว ผ่าน แก้สถานะเป็น "เสร็จ"
